@@ -1,189 +1,917 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>letters from civy</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- PageFlip library -->
-  <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
+<title>letters from civy</title>
 
-  <style>
-    /* Center the book */
-    .book-wrapper {
-        display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 40px 20px;
-    }
-    /* Book container */
-    #book {
-      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-      border-radius: 12px;
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 
-      border: 8px solid #3b2f2f;
-      background: #3b2f2f;
-    }
+<style>
+:root {
+  --green: #293e31;
+  --gold: #c5ad78;
+  --paper: #f4ecdb;
+  --ink: #423d33;
+}
 
-    /* Each page */
-   .page {
-  background: #F5F1E8;
-  /* Add a subtle gradient to simulate paper grain/lighting */
-  background-image: linear-gradient(to right, rgba(0,0,0,0.03) 0%, rgba(255,255,255,0) 5%, rgba(255,255,255,0) 95%, rgba(0,0,0,0.03) 100%);
-  color: #141414;
-  padding: 50px 40px;
-  font-family: "Times New Roman", Times, serif;
-  box-sizing: border-box; /* Ensures padding doesn't break the layout */
-  
-  /* These help with the rendering of the "curl" */
-  -webkit-backface-visibility: hidden;
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #19291f;
+  font-family: 'DM Sans', sans-serif;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.book {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  perspective: 2200px;
+}
+
+/* MOSS GREEN BOOK COVER */
+
+.cover {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  color: #ebdec2;
+  cursor: pointer;
+  transform-origin: left center;
   backface-visibility: hidden;
+  transition:
+    transform 1.2s ease,
+    opacity 1.2s ease;
+
+  background:
+    repeating-linear-gradient(
+      92deg,
+      transparent 0 3px,
+      #ffffff05 3px 4px
+    ),
+    radial-gradient(
+      ellipse at center,
+      #47624d,
+      #293e31 65%,
+      #15251b
+    );
+
+  box-shadow: inset 0 0 110px #08180b88;
 }
 
-/* This adds a "spine" shadow when the book is open */
-.page.-left {
-  border-right: 1px solid rgba(0,0,0,0.1);
-  box-shadow: inset -7px 0 10px -7px rgba(0,0,0,0.2);
+.cover.open {
+  transform: rotateY(-115deg);
+  opacity: 0;
+  pointer-events: none;
 }
 
-.page.-right {
-  border-left: 1px solid rgba(0,0,0,0.1);
-  box-shadow: inset 7px 0 10px -7px rgba(0,0,0,0.2);
+.cover-border {
+  position: absolute;
+  inset: 5%;
+  border: 1px solid #c5ad78aa;
+
+  box-shadow:
+    0 0 0 10px #243b2d,
+    0 0 0 11px #c5ad7877;
 }
 
-    /* Optional: page number */
-    .pagenum {
-      position: absolute;
-      bottom: 20px;
-      right: 25px;
-      opacity: 0.55;
-      font-size: 0.9rem;
-    }
+.cover-text {
+  text-align: center;
+  padding: 22px;
+}
 
-    /* Titles */
-    .page h2 {
-      margin-top: 0;
-      font-size: 2rem;
-    }
+.overline {
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
 
-    .page .date {
-      color: #16253E;
-      font-weight: 650;
-      margin-top: -10px;
-      margin-bottom: 25px;
-      opacity: 0.95;
-    }
+.cover h1 {
+  font: 500 clamp(60px,10vw,145px)/.9
+    'Cormorant Garamond', Georgia, serif;
 
-    .poem {
-      font-family: "Courier New", monospace;
-      white-space: pre-wrap;
-      font-weight: 500;
-    }
-  </style>
+  margin: 48px 0 25px;
+}
+
+.cover h1 em {
+  display: block;
+  font-weight: 400;
+}
+
+.motto {
+  font: italic clamp(19px,2.5vw,30px)
+    'Cormorant Garamond', serif;
+}
+
+.hint {
+  position: absolute;
+  bottom: 9%;
+  width: 100%;
+  text-align: center;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .2em;
+}
+
+/* OPEN BOOK */
+
+.spread {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--paper);
+}
+
+.spread:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 20px);
+  width: 40px;
+  z-index: 3;
+  pointer-events: none;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #51412f35 45%,
+    #fff9e077 55%,
+    transparent
+  );
+}
+
+.page {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 9% 12%;
+  color: var(--ink);
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      #7e694006 0 1px,
+      transparent 1px 5px
+    ),
+    linear-gradient(
+      90deg,
+      #e9dfca,
+      #f8f1e4 14%,
+      #f4ecdb 90%,
+      #e8ddc9
+    );
+}
+
+.page.right {
+  background: linear-gradient(
+    90deg,
+    #e8ddc9,
+    #f4ecdb 12%,
+    #f8f1e4 88%,
+    #e9dfca
+  );
+}
+
+.label {
+  text-transform: uppercase;
+  letter-spacing: .24em;
+  color: #718065;
+  font-size: clamp(9px,.9vw,12px);
+}
+
+.page h2 {
+  font: 500 clamp(40px,6vw,96px)/.95
+    'Cormorant Garamond', Georgia, serif;
+  margin: 22px 0;
+}
+
+.page h3 {
+  font: 500 clamp(27px,3.7vw,55px)
+    'Cormorant Garamond', Georgia, serif;
+  margin: 18px 0;
+}
+
+.page p {
+  font: clamp(17px,2vw,28px)/1.45
+    'Cormorant Garamond', Georgia, serif;
+  max-width: 600px;
+  margin: 10px 0;
+}
+
+.page .small {
+  font-size: clamp(16px,1.65vw,23px);
+}
+
+.muted {
+  color: #89806e;
+  font-style: italic;
+}
+
+.number {
+  position: absolute;
+  bottom: 24px;
+  font: 18px 'Cormorant Garamond', serif;
+  color: #8d836f;
+}
+
+.left .number {
+  left: 12%;
+}
+
+.right .number {
+  right: 12%;
+}
+
+/* CLICKABLE PAGE EDGES */
+
+.edge {
+  position: absolute;
+  z-index: 8;
+  top: 12%;
+  bottom: 12%;
+  width: 10%;
+  border: 0;
+  background: transparent;
+  color: #766f58;
+  font-size: 38px;
+  opacity: .45;
+}
+
+.edge:hover,
+.edge:focus-visible {
+  opacity: 1;
+}
+
+.edge.left-edge {
+  left: 0;
+
+  background: linear-gradient(
+    90deg,
+    #9c8a6530,
+    transparent
+  );
+}
+
+.edge.right-edge {
+  right: 0;
+
+  background: linear-gradient(
+    270deg,
+    #9c8a6530,
+    transparent
+  );
+}
+
+.edge:disabled {
+  opacity: 0;
+  cursor: default;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* 3D PAGE FLIPPING */
+
+.leaf {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 7;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+.leaf.forward {
+  left: 50%;
+  transform-origin: left center;
+
+  animation: forward 1s
+    cubic-bezier(.35,.04,.22,1) forwards;
+}
+
+.leaf.backward {
+  left: 0;
+  transform-origin: right center;
+
+  animation: backward 1s
+    cubic-bezier(.35,.04,.22,1) forwards;
+}
+
+.face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+
+.face .page {
+  width: 100%;
+  height: 100%;
+}
+
+.face.back {
+  transform: rotateY(180deg);
+}
+
+.face:after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background: linear-gradient(
+    90deg,
+    #2a201020,
+    transparent 55%,
+    #2a201025
+  );
+}
+
+@keyframes forward {
+  from {
+    transform: rotateY(0);
+  }
+
+  to {
+    transform: rotateY(-180deg);
+  }
+}
+
+@keyframes backward {
+  from {
+    transform: rotateY(0);
+  }
+
+  to {
+    transform: rotateY(180deg);
+  }
+}
+
+/* NAVIGATION */
+
+.menu {
+  position: absolute;
+  z-index: 10;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 15px;
+  border-radius: 30px;
+  background: #f5eddfec;
+  box-shadow: 0 4px 20px #221d1830;
+  white-space: nowrap;
+}
+
+.menu button,
+.cover-button {
+  background: none;
+  border: 0;
+  color: #4d493c;
+  padding: 8px;
+}
+
+.menu button:disabled {
+  opacity: .3;
+  cursor: default;
+}
+
+#counter {
+  font-size: 12px;
+  color: #807765;
+}
+
+.cover-button {
+  position: absolute;
+  top: 14px;
+  left: 15px;
+  z-index: 10;
+  background: #f5eddfdf;
+  border-radius: 20px;
+  padding: 10px 16px;
+  font-size: 12px;
+}
+
+.toc {
+  display: block;
+  width: 100%;
+  background: none;
+  text-align: left;
+  border: 0;
+  border-bottom: 1px solid #9b927c77;
+  color: var(--ink);
+  padding: 14px 0;
+
+  font: clamp(22px,2.5vw,35px)
+    'Cormorant Garamond', serif;
+}
+
+.toc:hover {
+  color: #65805f;
+}
+
+/* SMALL SCREENS */
+
+@media(max-width:650px) {
+  .page {
+    padding: 60px 10% 75px;
+  }
+
+  .page h2 {
+    font-size: clamp(28px,8vw,52px);
+  }
+
+  .page h3 {
+    font-size: clamp(21px,5vw,34px);
+  }
+
+  .page p {
+    font-size: clamp(14px,3.5vw,20px);
+  }
+
+  .page .small {
+    font-size: clamp(13px,3vw,18px);
+  }
+
+  .toc {
+    font-size: clamp(15px,3.8vw,24px);
+    padding: 9px 0;
+  }
+
+  .edge {
+    width: 9%;
+    font-size: 24px;
+  }
+
+  .menu {
+    bottom: 6px;
+    gap: 5px;
+    padding: 4px 8px;
+  }
+
+  .menu button {
+    font-size: 11px;
+  }
+
+  .number {
+    bottom: 60px;
+  }
+
+  .cover h1 {
+    font-size: clamp(48px,10vw,75px);
+  }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .cover {
+    transition-duration: .01ms;
+  }
+
+  .leaf {
+    animation-duration: .01ms !important;
+  }
+}
+</style>
 </head>
 
 <body>
-  <div class="book-wrapper">
-    <div id="book">
-      <!-- PAGE 1 -->
-      <div class="page" data-page="home" style="position: relative;">
-        <h1>letters from civy</h1>
-        <p class="subtitle">where all my thoughts and wonders roam free</p>
-        <p style="opacity:0.7; margin-top: 40px;">flip the page →</p>
-        <span class="pagenum">1</span>
+
+<main class="book">
+
+  <section class="spread" id="spread"></section>
+
+  <button
+    class="edge left-edge"
+    id="leftEdge"
+    aria-label="Previous pages"
+    hidden>
+    ‹
+  </button>
+
+  <button
+    class="edge right-edge"
+    id="rightEdge"
+    aria-label="Next pages"
+    hidden>
+    ›
+  </button>
+
+  <button
+    class="cover-button"
+    id="close"
+    hidden>
+    ↶ Cover
+  </button>
+
+  <nav class="menu" id="menu" hidden>
+    <button id="previous">← Previous</button>
+    <span id="counter"></span>
+    <button id="next">Next →</button>
+  </nav>
+
+  <div
+    class="cover"
+    id="cover"
+    role="button"
+    tabindex="0">
+
+    <div class="cover-border"></div>
+
+    <div class="cover-text">
+
+      <div class="overline">
+        A personal writing archive
       </div>
 
-      <!-- PAGE 2 -->
-      <div class="page" data-page="contents" style="position: relative;">
-        <h2>Contents</h2>
-        <ul>
-          <li><a href="#someone-like-yours">someone like yours</a></li>
-        </ul>
-        <span class="pagenum">2</span>
-      </div>
+      <h1>
+        letters <em>from civy</em>
+      </h1>
 
-      <!-- PAGE 3 (left) -->
-      <div class="page" data-page="someone-like-yours" style="position: relative;">
-        <h2>someone like yours</h2>
-        <p class="date">December 27, 2025</p>
+      <p class="motto">
+        where words never cease to be free
+      </p>
 
-        <pre class="poem">
-countless times i lie
-h e a r t b r o k e n
-the s-t-r-i-n-g-s in my soul
-ripped              apart
-with no mercy
-under my tear-stained
-covers and salty pillow
-        </pre>
-
-        <span class="pagenum">3</span>
-      </div>
-
-      <!-- PAGE 4 (right) -->
-      <div class="page" data-page="someone-like-yours-2" style="position: relative;">
-        <pre class="poem">
-s
-  c
-     r
-o
-                 l
-              l
-       i
-n
-   g
-past your posts of her...
-        </pre>
-
-        <span class="pagenum">4</span>
-      </div>
-
-      <!-- Add more pages here -->
     </div>
+
+    <div class="hint">
+      Click anywhere to open ✦
+    </div>
+
   </div>
 
-  <script>
-const bookEl = document.getElementById("book");
+</main>
 
-    // Create page flip instance
-    const pageFlip = new St.PageFlip(bookEl, {
-  width: 550,
-  height: 700,
-  size: "stretch",
-  minWidth: 350,
-  maxWidth: 800,
-  minHeight: 500,
-  maxHeight: 900,
+<script>
 
-  showCover: true,
-  mobileScrollSupport: true,
+/* EDIT YOUR WRITING COLLECTIONS HERE LATER */
 
-  // --- ADD THESE FOR THE CURL EFFECT ---
-  drawShadow: true,      // Essential for depth
-  flippingTime: 1000,    // Slows it down slightly to see the curve
-  usePortrait: true,     // Helps with the "bend" logic on single pages
+const chapters = [
 
-    // Load pages
-    pageFlip.loadFromHTML(document.querySelectorAll(".page"));
+  // OPENING LETTER
+  [
+    `<span class="label">A note from the author</span>
+     <h2>Dear<br>Reader,</h2>
+     <p>
+       Code and writing. One builds with logic,
+       the other with emotions, but both are
+       languages creating worlds beyond what
+       the mind can hold.
+     </p>`,
 
-    // Jump to a page if URL hash is present
-    function goToHashPage() {
-      const hash = window.location.hash.replace("#", "");
-      if (!hash) return;
+    `<span class="label">Welcome</span>
+     <h3>A little world of words.</h3>
+     <p class="small">
+       So I thought, why not create a place
+       where code gives writing a home?
+     </p>
+     <p class="small">
+       Here you will find my personal writing
+       archive, where I publish poems and
+       short pieces. If you do happen to
+       read any, I thank you dearly.
+     </p>
+     <p class="muted">With love, Civy</p>`
+  ],
 
-      // Find the page index of the matching data-page attribute
-      const pages = [...document.querySelectorAll(".page")];
-      const index = pages.findIndex(p => p.dataset.page === hash);
-      if (index !== -1) {
-        pageFlip.flip(index);
-      }
+  // TABLE OF CONTENTS
+  [
+    `<span class="label">Find your way around</span>
+     <h2>Contents</h2>
+     <p class="muted">Choose a chapter to begin.</p>`,
+
+    `<span class="label">The chapters</span>
+     <button class="toc" data-go="2">
+       I. Poetry
+     </button>
+     <button class="toc" data-go="3">
+       II. Short Stories
+     </button>
+     <button class="toc" data-go="4">
+       III. Other Musings
+     </button>
+     <button class="toc" data-go="5">
+       IV. About the Author
+     </button>`
+  ],
+
+  // POETRY
+  [
+    `<span class="label">Chapter one</span>
+     <h2>Poetry</h2>
+     <p class="muted">
+       For what I cannot quite say aloud.
+     </p>`,
+
+    `<span class="label">The collection</span>
+     <h3>Coming soon.</h3>
+     <p class="small">
+       This page is waiting for its first poem.
+     </p>`
+  ],
+
+  // SHORT STORIES
+  [
+    `<span class="label">Chapter two</span>
+     <h2>Short<br>Stories</h2>
+     <p class="muted">
+       Little worlds waiting to be found.
+     </p>`,
+
+    `<span class="label">The collection</span>
+     <h3>Coming soon.</h3>
+     <p class="small">
+       A home for characters, stories,
+       and everything in between.
+     </p>`
+  ],
+
+  // OTHER MUSINGS
+  [
+    `<span class="label">Chapter three</span>
+     <h2>Other<br>Musings</h2>
+     <p class="muted">
+       Thoughts that refuse a category.
+     </p>`,
+
+    `<span class="label">The collection</span>
+     <h3>Coming soon.</h3>
+     <p class="small">
+       Fragments, essays, experiments,
+       and whatever else finds a home here.
+     </p>`
+  ],
+
+  // ABOUT THE AUTHOR
+  [
+    `<span class="label">Chapter four</span>
+     <h2>About the<br>Author</h2>`,
+
+    `<span class="label">A little more about me</span>
+     <h3>Hello, I'm Civy.</h3>
+     <p class="small">
+       I'm building this little corner of
+       the internet to give my writing a home.
+     </p>
+     <p class="muted">More to come.</p>`
+  ],
+
+  // FINAL PAGE
+  [
+    `<span class="label">The end, for now</span>
+     <h2>Until our<br>next letter.</h2>
+     <p class="muted">Thank you for reading.</p>`,
+
+    `<span class="label">letters from civy</span>
+     <h3>Every ending is a beginning.</h3>
+     <p class="small">
+       Come back when there are more
+       pages to turn.
+     </p>`
+  ]
+];
+
+/* BOOK INTERACTIONS */
+
+const $ = id => document.getElementById(id);
+const spread = $('spread');
+
+let current = 0;
+let opened = false;
+let flipping = false;
+let coverTimer;
+
+function page(content, side, number) {
+  return `<article class="page ${side}">
+    ${content}
+    <span class="number">${number}</span>
+  </article>`;
+}
+
+function render() {
+  spread.innerHTML =
+    page(chapters[current][0], 'left', current * 2 + 1)
+    + page(chapters[current][1], 'right', current * 2 + 2);
+
+  $('counter').textContent =
+    `${current + 1} / ${chapters.length}`;
+
+  $('previous').disabled =
+    $('leftEdge').disabled = current === 0;
+
+  $('next').disabled =
+    $('rightEdge').disabled =
+      current === chapters.length - 1;
+}
+
+function openBook() {
+  if (opened) return;
+
+  opened = true;
+  $('cover').classList.add('open');
+
+  for (const id of [
+    'menu', 'close', 'leftEdge', 'rightEdge'
+  ]) {
+    $(id).hidden = false;
+  }
+
+  render();
+
+  clearTimeout(coverTimer);
+
+  coverTimer = setTimeout(() => {
+    if (opened) {
+      $('cover').hidden = true;
     }
+  }, 1250);
+}
 
-    window.addEventListener("hashchange", goToHashPage);
-    setTimeout(goToHashPage, 200); // wait for render
-  </script>
+function closeBook() {
+  if (flipping) return;
+
+  opened = false;
+  current = 0;
+  render();
+
+  clearTimeout(coverTimer);
+  $('cover').hidden = false;
+  $('cover').classList.remove('open');
+
+  for (const id of [
+    'menu', 'close', 'leftEdge', 'rightEdge'
+  ]) {
+    $(id).hidden = true;
+  }
+}
+
+function flip(to) {
+  if (
+    !opened ||
+    flipping ||
+    to < 0 ||
+    to >= chapters.length ||
+    to === current
+  ) {
+    return;
+  }
+
+  // Jump directly when selecting a distant chapter.
+  if (Math.abs(to - current) > 1) {
+    current = to;
+    render();
+    return;
+  }
+
+  flipping = true;
+
+  const forward = to > current;
+
+  const oldLeft = page(
+    chapters[current][0],
+    'left',
+    current * 2 + 1
+  );
+
+  const oldRight = page(
+    chapters[current][1],
+    'right',
+    current * 2 + 2
+  );
+
+  const newLeft = page(
+    chapters[to][0],
+    'left',
+    to * 2 + 1
+  );
+
+  const newRight = page(
+    chapters[to][1],
+    'right',
+    to * 2 + 2
+  );
+
+  spread.innerHTML = forward
+    ? oldLeft + newRight
+    : newLeft + oldRight;
+
+  const leaf = document.createElement('div');
+
+  leaf.className =
+    `leaf ${forward ? 'forward' : 'backward'}`;
+
+  leaf.innerHTML = `
+    <div class="face front">
+      ${forward ? oldRight : oldLeft}
+    </div>
+
+    <div class="face back">
+      ${forward ? newLeft : newRight}
+    </div>
+  `;
+
+  document.querySelector('.book').appendChild(leaf);
+
+  for (const id of [
+    'previous', 'next', 'leftEdge', 'rightEdge'
+  ]) {
+    $(id).disabled = true;
+  }
+
+  leaf.addEventListener('animationend', () => {
+    leaf.remove();
+    current = to;
+    flipping = false;
+    render();
+  }, { once: true });
+}
+
+/* BUTTON CONTROLS */
+
+$('cover').addEventListener('click', openBook);
+
+$('cover').addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    openBook();
+  }
+});
+
+$('close').addEventListener('click', closeBook);
+
+$('previous').addEventListener(
+  'click',
+  () => flip(current - 1)
+);
+
+$('next').addEventListener(
+  'click',
+  () => flip(current + 1)
+);
+
+$('leftEdge').addEventListener(
+  'click',
+  () => flip(current - 1)
+);
+
+$('rightEdge').addEventListener(
+  'click',
+  () => flip(current + 1)
+);
+
+/* TABLE OF CONTENTS */
+
+spread.addEventListener('click', e => {
+  const link = e.target.closest('[data-go]');
+
+  if (link) {
+    flip(Number(link.dataset.go));
+  }
+});
+
+/* KEYBOARD CONTROLS */
+
+document.addEventListener('keydown', e => {
+  if (!opened) return;
+
+  if (e.key === 'ArrowLeft') {
+    flip(current - 1);
+  }
+
+  if (e.key === 'ArrowRight') {
+    flip(current + 1);
+  }
+
+  if (e.key === 'Escape') {
+    closeBook();
+  }
+});
+
+render();
+
+</script>
+
 </body>
 </html>
-
