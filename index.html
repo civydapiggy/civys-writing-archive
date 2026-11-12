@@ -65,14 +65,14 @@ body {
 
 .book:not(.is-open) {
   width: min(70vw, 500px);
-  height: min(84vh, 700px);
+  height: min(91vh, 760px);
 }
 
 /* Open book: two pages side by side */
 
 .book.is-open {
-  width: min(92vw, 1100px);
-  height: min(86vh, 760px);
+  width: min(94vw, 1150px);
+  height: min(92vh, 820px);
 }
 
 @media (max-width: 650px) {
@@ -293,17 +293,26 @@ body {
 .edge {
   position: absolute;
   z-index: 8;
-  top: 10%;
-  bottom: 10%;
-  width: 6%;
-  border: 0;
-  background: transparent;
+
+  top: 0;
+  bottom: 0;
+
+  width: 7%;
+
+  border: none;
+  padding: 0;
+
   color: #766f58;
-  font-size: 34px;
-  opacity: .55;
+  font-size: 30px;
+
+  opacity: 0.45;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  cursor: pointer;
+  transition: opacity 0.25s ease;
 }
 
 .edge:hover,
@@ -312,21 +321,30 @@ body {
 }
 
 .edge.left-edge {
-  left: 8px;
+  left: 0;
+
   background: linear-gradient(
-    90deg,
-    #9c8a6526,
-    transparent
+    to right,
+    rgba(93, 75, 44, 0.10) 0%,
+    rgba(93, 75, 44, 0.04) 35%,
+    transparent 100%
   );
 }
 
 .edge.right-edge {
-  right: 8px;
+  right: 0;
+
   background: linear-gradient(
-    270deg,
-    #9c8a6526,
-    transparent
+    to left,
+    rgba(93, 75, 44, 0.10) 0%,
+    rgba(93, 75, 44, 0.04) 35%,
+    transparent 100%
   );
+}
+
+.edge:hover,
+.edge:focus-visible {
+  opacity: 1;
 }
 
 .edge:disabled {
