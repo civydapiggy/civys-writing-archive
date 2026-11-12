@@ -31,13 +31,60 @@ button {
   cursor: pointer;
 }
 
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #19291f;
+  overflow: hidden;
+}
+
 .book {
   position: relative;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
+
+  width: min(92vw, 1100px);
+  height: min(82vh, 720px);
+
   overflow: hidden;
   perspective: 2200px;
+
+  border-radius: 5px;
+  box-shadow: 0 25px 80px #0008;
+
+  transition:
+    width 1.2s ease,
+    height 1.2s ease;
+}
+
+/* Closed book: vertical like a real novel */
+
+.book:not(.is-open) {
+  width: min(65vw, 430px);
+  height: min(78vh, 620px);
+}
+
+/* Open book: two pages side by side */
+
+.book.is-open {
+  width: min(92vw, 1100px);
+  height: min(82vh, 720px);
+}
+
+@media (max-width: 650px) {
+  .book:not(.is-open) {
+    width: min(78vw, 350px);
+    height: min(72vh, 520px);
+  }
+
+  .book.is-open {
+    width: 96vw;
+    height: min(75vh, 600px);
+  }
 }
 
 /* MOSS GREEN BOOK COVER */
@@ -100,10 +147,10 @@ button {
 }
 
 .cover h1 {
-  font: 500 clamp(60px,10vw,145px)/.9
+  font: 500 clamp(48px, 6vw, 76px)/1
     'Cormorant Garamond', Georgia, serif;
 
-  margin: 48px 0 25px;
+  margin: 35px 0 20px;
 }
 
 .cover h1 em {
@@ -730,7 +777,11 @@ function openBook() {
   if (opened) return;
 
   opened = true;
-  $('cover').classList.add('open');
+
+document.querySelector('.book')
+  .classList.add('is-open');
+
+$('cover').classList.add('open');
 
   for (const id of [
     'menu', 'close', 'leftEdge', 'rightEdge'
@@ -753,8 +804,12 @@ function closeBook() {
   if (flipping) return;
 
   opened = false;
-  current = 0;
-  render();
+current = 0;
+
+document.querySelector('.book')
+  .classList.remove('is-open');
+
+render();
 
   clearTimeout(coverTimer);
   $('cover').hidden = false;
