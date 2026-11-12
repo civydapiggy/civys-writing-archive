@@ -64,15 +64,15 @@ body {
 /* Closed book: vertical like a real novel */
 
 .book:not(.is-open) {
-  width: min(65vw, 430px);
-  height: min(78vh, 620px);
+  width: min(70vw, 500px);
+  height: min(84vh, 700px);
 }
 
 /* Open book: two pages side by side */
 
 .book.is-open {
   width: min(92vw, 1100px);
-  height: min(82vh, 720px);
+  height: min(86vh, 760px);
 }
 
 @media (max-width: 650px) {
@@ -293,14 +293,17 @@ body {
 .edge {
   position: absolute;
   z-index: 8;
-  top: 12%;
-  bottom: 12%;
-  width: 10%;
+  top: 10%;
+  bottom: 10%;
+  width: 6%;
   border: 0;
   background: transparent;
   color: #766f58;
-  font-size: 38px;
-  opacity: .45;
+  font-size: 34px;
+  opacity: .55;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .edge:hover,
@@ -309,21 +312,19 @@ body {
 }
 
 .edge.left-edge {
-  left: 0;
-
+  left: 8px;
   background: linear-gradient(
     90deg,
-    #9c8a6530,
+    #9c8a6526,
     transparent
   );
 }
 
 .edge.right-edge {
-  right: 0;
-
+  right: 8px;
   background: linear-gradient(
     270deg,
-    #9c8a6530,
+    #9c8a6526,
     transparent
   );
 }
@@ -417,38 +418,11 @@ body {
 
 /* NAVIGATION */
 
-.menu {
-  position: absolute;
-  z-index: 10;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 8px 15px;
-  border-radius: 30px;
-  background: #f5eddfec;
-  box-shadow: 0 4px 20px #221d1830;
-  white-space: nowrap;
-}
-
-.menu button,
 .cover-button {
   background: none;
   border: 0;
   color: #4d493c;
   padding: 8px;
-}
-
-.menu button:disabled {
-  opacity: .3;
-  cursor: default;
-}
-
-#counter {
-  font-size: 12px;
-  color: #807765;
 }
 
 .cover-button {
@@ -509,9 +483,9 @@ body {
   }
 
   .edge {
-    width: 9%;
-    font-size: 24px;
-  }
+  width: 8%;
+  font-size: 22px;
+}
 
   .menu {
     bottom: 6px;
@@ -573,11 +547,6 @@ body {
     ↶ Cover
   </button>
 
-  <nav class="menu" id="menu" hidden>
-    <button id="previous">← Previous</button>
-    <span id="counter"></span>
-    <button id="next">Next →</button>
-  </nav>
 
   <div
     class="cover"
@@ -762,15 +731,9 @@ function render() {
     page(chapters[current][0], 'left', current * 2 + 1)
     + page(chapters[current][1], 'right', current * 2 + 2);
 
-  $('counter').textContent =
-    `${current + 1} / ${chapters.length}`;
-
-  $('previous').disabled =
-    $('leftEdge').disabled = current === 0;
-
-  $('next').disabled =
-    $('rightEdge').disabled =
-      current === chapters.length - 1;
+  $('leftEdge').disabled = current === 0;
+$('rightEdge').disabled =
+  current === chapters.length - 1;
 }
 
 function openBook() {
@@ -784,10 +747,10 @@ document.querySelector('.book')
 $('cover').classList.add('open');
 
   for (const id of [
-    'menu', 'close', 'leftEdge', 'rightEdge'
-  ]) {
-    $(id).hidden = false;
-  }
+  'close', 'leftEdge', 'rightEdge'
+]) {
+  $(id).hidden = false;
+}
 
   render();
 
@@ -816,10 +779,10 @@ render();
   $('cover').classList.remove('open');
 
   for (const id of [
-    'menu', 'close', 'leftEdge', 'rightEdge'
-  ]) {
-    $(id).hidden = true;
-  }
+  'close', 'leftEdge', 'rightEdge'
+]) {
+  $(id).hidden = true;
+}
 }
 
 function flip(to) {
@@ -890,10 +853,10 @@ function flip(to) {
   document.querySelector('.book').appendChild(leaf);
 
   for (const id of [
-    'previous', 'next', 'leftEdge', 'rightEdge'
-  ]) {
-    $(id).disabled = true;
-  }
+  'leftEdge', 'rightEdge'
+]) {
+  $(id).disabled = true;
+}
 
   leaf.addEventListener('animationend', () => {
     leaf.remove();
@@ -916,15 +879,6 @@ $('cover').addEventListener('keydown', e => {
 
 $('close').addEventListener('click', closeBook);
 
-$('previous').addEventListener(
-  'click',
-  () => flip(current - 1)
-);
-
-$('next').addEventListener(
-  'click',
-  () => flip(current + 1)
-);
 
 $('leftEdge').addEventListener(
   'click',
