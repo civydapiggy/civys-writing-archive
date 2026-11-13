@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,13 +7,14 @@
 
 <title>letters from civy</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
+
 :root {
   --green: #293e31;
   --gold: #c5ad78;
-  --paper: #f4ecdb;
+  --paper: #f6eedf;
   --ink: #423d33;
 }
 
@@ -22,92 +24,131 @@
 
 body {
   margin: 0;
-  background: #19291f;
-  font-family: 'DM Sans', sans-serif;
-}
-
-button {
-  font: inherit;
-  cursor: pointer;
-}
-
-body {
-  margin: 0;
   min-height: 100vh;
   min-height: 100dvh;
-
   display: flex;
-  justify-content: center;
   align-items: center;
-
+  justify-content: center;
+  overflow: hidden;
   background: #19291f;
-  overflow: hidden;
+  font-family: "DM Sans", sans-serif;
 }
 
-.book {
+/* BOOK POSITION */
+
+.book-area {
   position: relative;
+  width: min(96vw, 1200px);
+  height: 94vh;
+  height: 94dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  width: min(92vw, 1100px);
-  height: min(82vh, 720px);
+#book {
+  width: 100%;
+  height: 100%;
+}
 
+/* THE PAPER */
+
+.page {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(100,80,40,.018) 0px,
+      rgba(100,80,40,.018) 1px,
+      transparent 1px,
+      transparent 5px
+    ),
+    var(--paper);
+
+  color: var(--ink);
   overflow: hidden;
-  perspective: 2200px;
-
-  border-radius: 5px;
-  box-shadow: 0 25px 80px #0008;
-
-  transition:
-    width 1.2s ease,
-    height 1.2s ease;
 }
 
-/* Closed book: vertical like a real novel */
-
-.book:not(.is-open) {
-  width: min(70vw, 500px);
-  height: min(91vh, 760px);
+.page-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 11% 12% 12%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-/* Open book: two pages side by side */
-
-.book.is-open {
-  width: min(94vw, 1150px);
-  height: min(92vh, 820px);
-}
-
-@media (max-width: 650px) {
-  .book:not(.is-open) {
-    width: min(78vw, 350px);
-    height: min(72vh, 520px);
-  }
-
-  .book.is-open {
-    width: 96vw;
-    height: min(75vh, 600px);
-  }
-}
-
-/* MOSS GREEN BOOK COVER */
-
-.cover {
+.page-content::after {
+  content: "";
   position: absolute;
   inset: 0;
-  z-index: 20;
-  display: grid;
-  place-items: center;
-  color: #ebdec2;
-  cursor: pointer;
-  transform-origin: left center;
-  backface-visibility: hidden;
-  transition:
-    transform 1.2s ease,
-    opacity 1.2s ease;
+  pointer-events: none;
+  box-shadow: inset 0 0 35px rgba(75,55,30,.05);
+}
+
+.page-number {
+  position: absolute;
+  bottom: 5%;
+  font: 18px "Cormorant Garamond", serif;
+  color: #90846f;
+}
+
+.page-number.left {
+  left: 12%;
+}
+
+.page-number.right {
+  right: 12%;
+}
+
+/* TYPOGRAPHY */
+
+.label {
+  font: 500 clamp(9px,1vw,12px) "DM Sans", sans-serif;
+  color: #718065;
+  text-transform: uppercase;
+  letter-spacing: .23em;
+}
+
+h2 {
+  font: 500 clamp(38px,5vw,75px)/1
+    "Cormorant Garamond", Georgia, serif;
+  margin: 24px 0 28px;
+}
+
+h3 {
+  font: 500 clamp(29px,3.6vw,51px)/1.08
+    "Cormorant Garamond", Georgia, serif;
+  margin: 18px 0 25px;
+}
+
+p {
+  font: clamp(18px,1.9vw,27px)/1.45
+    "Cormorant Garamond", Georgia, serif;
+  margin: 10px 0;
+}
+
+.small {
+  font-size: clamp(17px,1.6vw,23px);
+}
+
+.muted {
+  color: #8b806e;
+  font-style: italic;
+}
+
+/* MOSS GREEN HARDCOVER */
+
+.hardcover {
+  color: #ecdec2;
 
   background:
     repeating-linear-gradient(
       92deg,
-      transparent 0 3px,
-      #ffffff05 3px 4px
+      transparent 0px,
+      transparent 3px,
+      rgba(255,255,255,.025) 3px,
+      rgba(255,255,255,.025) 4px
     ),
     radial-gradient(
       ellipse at center,
@@ -116,838 +157,647 @@ body {
       #15251b
     );
 
-  box-shadow: inset 0 0 110px #08180b88;
-}
-
-.cover.open {
-  transform: rotateY(-115deg);
-  opacity: 0;
-  pointer-events: none;
+  box-shadow:
+    inset 0 0 80px rgba(0,0,0,.4);
 }
 
 .cover-border {
   position: absolute;
-  inset: 5%;
-  border: 1px solid #c5ad78aa;
-
-  box-shadow:
-    0 0 0 10px #243b2d,
-    0 0 0 11px #c5ad7877;
+  inset: 4%;
+  border: 1px solid rgba(197,173,120,.8);
+  outline: 7px solid rgba(20,45,30,.25);
+  pointer-events: none;
 }
 
-.cover-text {
+.cover-inside {
+  width: 100%;
+  height: 100%;
+  padding: 14% 7%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: 22px;
+  flex-direction: column;
+  position: relative;
 }
 
 .overline {
-  letter-spacing: .34em;
+  font: 600 11px "DM Sans", sans-serif;
+  letter-spacing: .28em;
   text-transform: uppercase;
-  font-size: 11px;
+  line-height: 1.8;
 }
 
-.cover h1 {
-  font: 500 clamp(48px, 6vw, 76px)/1
-    'Cormorant Garamond', Georgia, serif;
-
-  margin: 35px 0 20px;
+.cover-title {
+  font: 500 clamp(51px,6vw,84px)/.98
+    "Cormorant Garamond", Georgia, serif;
+  margin: 52px 0 28px;
 }
 
-.cover h1 em {
+.cover-title em {
   display: block;
   font-weight: 400;
 }
 
-.motto {
-  font: italic clamp(19px,2.5vw,30px)
-    'Cormorant Garamond', serif;
+.tagline {
+  font: italic clamp(19px,2vw,27px)/1.25
+    "Cormorant Garamond", serif;
 }
 
-.hint {
+.cover-hint {
   position: absolute;
   bottom: 9%;
-  width: 100%;
-  text-align: center;
-  font-size: 11px;
+  font: 600 10px "DM Sans", sans-serif;
+  letter-spacing: .17em;
   text-transform: uppercase;
-  letter-spacing: .2em;
 }
 
-/* OPEN BOOK */
-
-.spread {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: var(--paper);
-}
-
-.spread:after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc(50% - 20px);
-  width: 40px;
-  z-index: 3;
-  pointer-events: none;
-
-  background: linear-gradient(
-    90deg,
-    transparent,
-    #51412f35 45%,
-    #fff9e077 55%,
-    transparent
-  );
-}
-
-.page {
-  position: relative;
-  min-width: 0;
-  height: 100%;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 9% 12%;
-  color: var(--ink);
-
-  background:
-    repeating-linear-gradient(
-      0deg,
-      #7e694006 0 1px,
-      transparent 1px 5px
-    ),
-    linear-gradient(
-      90deg,
-      #e9dfca,
-      #f8f1e4 14%,
-      #f4ecdb 90%,
-      #e8ddc9
-    );
-}
-
-.page.right {
-  background: linear-gradient(
-    90deg,
-    #e8ddc9,
-    #f4ecdb 12%,
-    #f8f1e4 88%,
-    #e9dfca
-  );
-}
-
-.label {
-  text-transform: uppercase;
-  letter-spacing: .24em;
-  color: #718065;
-  font-size: clamp(9px,.9vw,12px);
-}
-
-.page h2 {
-  font: 500 clamp(40px,6vw,96px)/.95
-    'Cormorant Garamond', Georgia, serif;
-  margin: 22px 0;
-}
-
-.page h3 {
-  font: 500 clamp(27px,3.7vw,55px)
-    'Cormorant Garamond', Georgia, serif;
-  margin: 18px 0;
-}
-
-.page p {
-  font: clamp(17px,2vw,28px)/1.45
-    'Cormorant Garamond', Georgia, serif;
-  max-width: 600px;
-  margin: 10px 0;
-}
-
-.page .small {
-  font-size: clamp(16px,1.65vw,23px);
-}
-
-.muted {
-  color: #89806e;
-  font-style: italic;
-}
-
-.number {
-  position: absolute;
-  bottom: 24px;
-  font: 18px 'Cormorant Garamond', serif;
-  color: #8d836f;
-}
-
-.left .number {
-  left: 12%;
-}
-
-.right .number {
-  right: 12%;
-}
-
-/* CLICKABLE PAGE EDGES */
-
-.edge {
-  position: absolute;
-  z-index: 8;
-
-  top: 0;
-  bottom: 0;
-
-  width: 7%;
-
-  border: none;
-  padding: 0;
-
-  color: #766f58;
-  font-size: 30px;
-
-  opacity: 0.45;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  cursor: pointer;
-  transition: opacity 0.25s ease;
-}
-
-.edge:hover,
-.edge:focus-visible {
-  opacity: 1;
-}
-
-.edge.left-edge {
-  left: 0;
-
-  background: linear-gradient(
-    to right,
-    rgba(93, 75, 44, 0.10) 0%,
-    rgba(93, 75, 44, 0.04) 35%,
-    transparent 100%
-  );
-}
-
-.edge.right-edge {
-  right: 0;
-
-  background: linear-gradient(
-    to left,
-    rgba(93, 75, 44, 0.10) 0%,
-    rgba(93, 75, 44, 0.04) 35%,
-    transparent 100%
-  );
-}
-
-.edge:hover,
-.edge:focus-visible {
-  opacity: 1;
-}
-
-.edge:disabled {
-  opacity: 0;
-  cursor: default;
-}
-
-[hidden] {
-  display: none !important;
-}
-
-/* 3D PAGE FLIPPING */
-
-.leaf {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50%;
-  z-index: 7;
-  transform-style: preserve-3d;
-  pointer-events: none;
-}
-
-.leaf.forward {
-  left: 50%;
-  transform-origin: left center;
-
-  animation: forward 1s
-    cubic-bezier(.35,.04,.22,1) forwards;
-}
-
-.leaf.backward {
-  left: 0;
-  transform-origin: right center;
-
-  animation: backward 1s
-    cubic-bezier(.35,.04,.22,1) forwards;
-}
-
-.face {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  overflow: hidden;
-}
-
-.face .page {
-  width: 100%;
-  height: 100%;
-}
-
-.face.back {
-  transform: rotateY(180deg);
-}
-
-.face:after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-
-  background: linear-gradient(
-    90deg,
-    #2a201020,
-    transparent 55%,
-    #2a201025
-  );
-}
-
-@keyframes forward {
-  from {
-    transform: rotateY(0);
-  }
-
-  to {
-    transform: rotateY(-180deg);
-  }
-}
-
-@keyframes backward {
-  from {
-    transform: rotateY(0);
-  }
-
-  to {
-    transform: rotateY(180deg);
-  }
-}
-
-/* NAVIGATION */
-
-.cover-button {
-  background: none;
+.cover-open {
+  background: transparent;
   border: 0;
-  color: #4d493c;
-  padding: 8px;
+  padding: 12px;
+  color: #ecdec2;
+  cursor: pointer;
+  font: inherit;
 }
 
-.cover-button {
-  position: absolute;
-  top: 14px;
-  left: 15px;
-  z-index: 10;
-  background: #f5eddfdf;
-  border-radius: 20px;
-  padding: 10px 16px;
-  font-size: 12px;
+.cover-open:hover {
+  color: white;
 }
+
+/* TABLE OF CONTENTS */
 
 .toc {
   display: block;
+  border: none;
+  border-bottom: 1px solid #b4a993;
+  background: transparent;
   width: 100%;
-  background: none;
+  padding: 13px 0;
   text-align: left;
-  border: 0;
-  border-bottom: 1px solid #9b927c77;
   color: var(--ink);
-  padding: 14px 0;
+  cursor: pointer;
 
-  font: clamp(22px,2.5vw,35px)
-    'Cormorant Garamond', serif;
+  font: clamp(22px,2.6vw,36px)
+    "Cormorant Garamond", serif;
 }
 
 .toc:hover {
   color: #65805f;
 }
 
-/* SMALL SCREENS */
+/* EDGE CONTROLS */
 
-@media(max-width:650px) {
-  .page {
-    padding: 60px 10% 75px;
+.edge {
+  position: absolute;
+  z-index: 30;
+  top: 4%;
+  bottom: 4%;
+  width: 34px;
+  padding: 0;
+  border: none;
+  color: #766f58;
+  font-size: 28px;
+  cursor: pointer;
+  opacity: .55;
+  transition: opacity .2s ease;
+}
+
+.edge:hover {
+  opacity: 1;
+}
+
+.edge-left {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    rgba(93,75,44,.15),
+    transparent
+  );
+}
+
+.edge-right {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    rgba(93,75,44,.15),
+    transparent
+  );
+}
+
+.edge[hidden] {
+  display: none;
+}
+
+/* RETURN TO COVER */
+
+.return-cover {
+  position: absolute;
+  z-index: 35;
+  top: 5%;
+  left: 5%;
+  background: rgba(246,238,223,.95);
+  color: #554c3e;
+  border: none;
+  border-radius: 30px;
+  padding: 11px 18px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.return-cover[hidden] {
+  display: none;
+}
+
+@media (max-width: 650px) {
+  .book-area {
+    width: 98vw;
+    height: 90dvh;
   }
 
-  .page h2 {
-    font-size: clamp(28px,8vw,52px);
+  .page-content {
+    padding: 12% 10%;
   }
 
-  .page h3 {
-    font-size: clamp(21px,5vw,34px);
+  h2 {
+    font-size: clamp(27px,6vw,43px);
   }
 
-  .page p {
-    font-size: clamp(14px,3.5vw,20px);
+  h3 {
+    font-size: clamp(23px,5vw,34px);
   }
 
-  .page .small {
-    font-size: clamp(13px,3vw,18px);
+  p,
+  .small {
+    font-size: clamp(14px,3vw,19px);
   }
 
   .toc {
-    font-size: clamp(15px,3.8vw,24px);
-    padding: 9px 0;
+    font-size: clamp(16px,3vw,24px);
   }
 
   .edge {
-  width: 8%;
-  font-size: 22px;
-}
-
-  .menu {
-    bottom: 6px;
-    gap: 5px;
-    padding: 4px 8px;
+    width: 20px;
+    font-size: 21px;
   }
 
-  .menu button {
-    font-size: 11px;
-  }
-
-  .number {
-    bottom: 60px;
-  }
-
-  .cover h1 {
-    font-size: clamp(48px,10vw,75px);
+  .cover-title {
+    font-size: clamp(43px,8vw,66px);
   }
 }
 
-@media(prefers-reduced-motion:reduce) {
-  .cover {
-    transition-duration: .01ms;
-  }
-
-  .leaf {
-    animation-duration: .01ms !important;
-  }
-}
-
-  .edge.left-edge {
-  justify-content: flex-start;
-  padding-left: 12px;
-}
-
-.edge.right-edge {
-  justify-content: flex-end;
-  padding-right: 12px;
-}
-  
 </style>
 </head>
 
 <body>
 
-<main class="book">
+<main class="book-area">
 
-  <section class="spread" id="spread"></section>
+  <div id="book">
 
-  <button
-    class="edge left-edge"
-    id="leftEdge"
-    aria-label="Previous pages"
-    hidden>
-    ‹
-  </button>
+    <!-- FRONT COVER -->
 
-  <button
-    class="edge right-edge"
-    id="rightEdge"
-    aria-label="Next pages"
-    hidden>
-    ›
-  </button>
+    <div class="page hardcover" data-density="hard">
 
-  <button
-    class="cover-button"
-    id="close"
-    hidden>
-    ↶ Cover
-  </button>
+      <div class="cover-inside">
 
+        <div class="cover-border"></div>
 
-  <div
-    class="cover"
-    id="cover"
-    role="button"
-    tabindex="0">
+        <div class="overline">
+          A personal writing archive
+        </div>
 
-    <div class="cover-border"></div>
+        <h1 class="cover-title">
+          letters
+          <em>from civy</em>
+        </h1>
 
-    <div class="cover-text">
+        <div class="tagline">
+          where words never cease to be free
+        </div>
 
-      <div class="overline">
-        A personal writing archive
+        <div class="cover-hint">
+          <button class="cover-open" id="openBook">
+            Click to open ✦
+          </button>
+        </div>
+
       </div>
-
-      <h1>
-        letters <em>from civy</em>
-      </h1>
-
-      <p class="motto">
-        where words never cease to be free
-      </p>
-
     </div>
 
-    <div class="hint">
-      Click anywhere to open ✦
+    <!-- INSIDE FRONT COVER -->
+
+    <div class="page">
+      <div class="page-content">
+        <span class="label">Letters from Civy</span>
+
+        <h2>A place for words.</h2>
+
+        <p class="muted">
+          where words never cease to be free
+        </p>
+
+        <span class="page-number right">1</span>
+      </div>
+    </div>
+
+    <!-- OPENING LETTER -->
+
+    <div class="page">
+      <div class="page-content">
+        <span class="label">
+          A note from the author
+        </span>
+
+        <h2>Dear<br>Reader,</h2>
+
+        <p>
+          Code and writing. One builds with logic,
+          the other with emotions, but both are
+          languages creating worlds beyond what
+          the mind can hold.
+        </p>
+
+        <span class="page-number left">2</span>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="page-content">
+        <span class="label">Welcome</span>
+
+        <h3>A little world of words.</h3>
+
+        <p class="small">
+          So I thought, why not create a place
+          where code gives writing a home?
+        </p>
+
+        <p class="small">
+          Here you will find my personal writing
+          archive, where I publish poems and
+          short pieces. If you do happen to read
+          any, I thank you dearly.
+        </p>
+
+        <p class="muted">With love, Civy</p>
+
+        <span class="page-number right">3</span>
+      </div>
+    </div>
+
+    <!-- CONTENTS -->
+
+    <div class="page">
+      <div class="page-content">
+        <span class="label">
+          Find your way around
+        </span>
+
+        <h2>Contents</h2>
+
+        <p class="muted">
+          Choose a chapter to begin.
+        </p>
+
+        <span class="page-number left">4</span>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="page-content">
+        <span class="label">The chapters</span>
+
+        <button class="toc" data-page="6">
+          I. Poetry
+        </button>
+
+        <button class="toc" data-page="8">
+          II. Short Stories
+        </button>
+
+        <button class="toc" data-page="10">
+          III. Other Musings
+        </button>
+
+        <button class="toc" data-page="12">
+          IV. About the Author
+        </button>
+
+        <span class="page-number right">5</span>
+      </div>
+    </div>
+
+    <!-- POETRY -->
+
+    <div class="page">
+      <div class="page-content">
+        <span class="label">Chapter one</span>
+
+        <h2>Poetry</h2>
+
+        <p class="muted">
+          For what I cannot quite say aloud.
+        </p>
+
+        <span class="page-number left">6</span>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="page-content">
+        <span class="label">The collection</span>
+
+        <h3>Coming soon.</h3>
+
+        <p class="small">
+          This page is waiting for its first poem.
+        </p>
+
+        <span class="page-number right">7</span>
+      </div>
+    </div>
+
+    <!-- SHORT STORIES -->
+
+    <div class="page">
+      <div class="page-content">
+        <span class="label">Chapter two</span>
+
+        <h2>Short<br>Stories</h2>
+
+        <p class="muted">
+          Little worlds waiting to be found.
+        </p>
+
+        <span class="page-number left">8</span>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="page-content">
+        <span class="label">The collection</span>
+
+        <h3>Coming soon.</h3>
+
+        <p class="small">
+          A home for characters, stories,
+          and everything in between.
+        </p>
+
+        <span class="page-number right">9</span>
+      </div>
+    </div>
+
+    <!-- OTHER MUSINGS -->
+
+    <div class="page">
+      <div class="page-content">
+        <span class="label">Chapter three</span>
+
+        <h2>Other<br>Musings</h2>
+
+        <p class="muted">
+          Thoughts that refuse a category.
+        </p>
+
+        <span class="page-number left">10</span>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="page-content">
+        <span class="label">The collection</span>
+
+        <h3>Coming soon.</h3>
+
+        <p class="small">
+          Fragments, essays, experiments,
+          and whatever else finds a home here.
+        </p>
+
+        <span class="page-number right">11</span>
+      </div>
+    </div>
+
+    <!-- ABOUT THE AUTHOR -->
+
+    <div class="page">
+      <div class="page-content">
+        <span class="label">Chapter four</span>
+
+        <h2>About the<br>Author</h2>
+
+        <span class="page-number left">12</span>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="page-content">
+        <span class="label">
+          A little more about me
+        </span>
+
+        <h3>Hello, I'm Civy.</h3>
+
+        <p class="small">
+          I'm building this little corner
+          of the internet to give my writing a home.
+        </p>
+
+        <p class="muted">More to come.</p>
+
+        <span class="page-number right">13</span>
+      </div>
+    </div>
+
+    <!-- ENDING -->
+
+    <div class="page">
+      <div class="page-content">
+        <span class="label">The end, for now</span>
+
+        <h2>Until our<br>next letter.</h2>
+
+        <p class="muted">
+          Thank you for reading.
+        </p>
+
+        <span class="page-number left">14</span>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="page-content">
+        <span class="label">letters from civy</span>
+
+        <h3>Every ending is a beginning.</h3>
+
+        <p class="small">
+          Come back when there are more pages to turn.
+        </p>
+
+        <span class="page-number right">15</span>
+      </div>
+    </div>
+
+    <!-- BACK COVER -->
+
+    <div class="page hardcover" data-density="hard">
+      <div class="cover-inside">
+        <div class="cover-border"></div>
+        <p class="tagline">until next time ♡</p>
+      </div>
     </div>
 
   </div>
 
+  <!-- SIDE EDGE BUTTONS -->
+
+  <button class="edge edge-left"
+          id="prevEdge"
+          aria-label="Previous page"
+          hidden>‹</button>
+
+  <button class="edge edge-right"
+          id="nextEdge"
+          aria-label="Next page"
+          hidden>›</button>
+
+  <button class="return-cover"
+          id="returnCover"
+          hidden>
+    ↶ Cover
+  </button>
+
 </main>
+
+<!-- REALISTIC PAGE FLIP LIBRARY -->
+
+<script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
 
 <script>
 
-/* EDIT YOUR WRITING COLLECTIONS HERE LATER */
+const bookElement = document.getElementById("book");
+const pageElements = document.querySelectorAll("#book .page");
 
-const chapters = [
+const pageFlip = new St.PageFlip(bookElement, {
+  width: 520,
+  height: 700,
 
-  // OPENING LETTER
-  [
-    `<span class="label">A note from the author</span>
-     <h2>Dear<br>Reader,</h2>
-     <p>
-       Code and writing. One builds with logic,
-       the other with emotions, but both are
-       languages creating worlds beyond what
-       the mind can hold.
-     </p>`,
+  size: "stretch",
 
-    `<span class="label">Welcome</span>
-     <h3>A little world of words.</h3>
-     <p class="small">
-       So I thought, why not create a place
-       where code gives writing a home?
-     </p>
-     <p class="small">
-       Here you will find my personal writing
-       archive, where I publish poems and
-       short pieces. If you do happen to
-       read any, I thank you dearly.
-     </p>
-     <p class="muted">With love, Civy</p>`
-  ],
+  minWidth: 250,
+  maxWidth: 560,
 
-  // TABLE OF CONTENTS
-  [
-    `<span class="label">Find your way around</span>
-     <h2>Contents</h2>
-     <p class="muted">Choose a chapter to begin.</p>`,
+  minHeight: 340,
+  maxHeight: 760,
 
-    `<span class="label">The chapters</span>
-     <button class="toc" data-go="2">
-       I. Poetry
-     </button>
-     <button class="toc" data-go="3">
-       II. Short Stories
-     </button>
-     <button class="toc" data-go="4">
-       III. Other Musings
-     </button>
-     <button class="toc" data-go="5">
-       IV. About the Author
-     </button>`
-  ],
+  showCover: true,
 
-  // POETRY
-  [
-    `<span class="label">Chapter one</span>
-     <h2>Poetry</h2>
-     <p class="muted">
-       For what I cannot quite say aloud.
-     </p>`,
+  drawShadow: true,
+  maxShadowOpacity: 0.35,
 
-    `<span class="label">The collection</span>
-     <h3>Coming soon.</h3>
-     <p class="small">
-       This page is waiting for its first poem.
-     </p>`
-  ],
+  flippingTime: 1100,
 
-  // SHORT STORIES
-  [
-    `<span class="label">Chapter two</span>
-     <h2>Short<br>Stories</h2>
-     <p class="muted">
-       Little worlds waiting to be found.
-     </p>`,
+  usePortrait: true,
 
-    `<span class="label">The collection</span>
-     <h3>Coming soon.</h3>
-     <p class="small">
-       A home for characters, stories,
-       and everything in between.
-     </p>`
-  ],
+  useMouseEvents: true,
 
-  // OTHER MUSINGS
-  [
-    `<span class="label">Chapter three</span>
-     <h2>Other<br>Musings</h2>
-     <p class="muted">
-       Thoughts that refuse a category.
-     </p>`,
+  disableFlipByClick: true,
 
-    `<span class="label">The collection</span>
-     <h3>Coming soon.</h3>
-     <p class="small">
-       Fragments, essays, experiments,
-       and whatever else finds a home here.
-     </p>`
-  ],
-
-  // ABOUT THE AUTHOR
-  [
-    `<span class="label">Chapter four</span>
-     <h2>About the<br>Author</h2>`,
-
-    `<span class="label">A little more about me</span>
-     <h3>Hello, I'm Civy.</h3>
-     <p class="small">
-       I'm building this little corner of
-       the internet to give my writing a home.
-     </p>
-     <p class="muted">More to come.</p>`
-  ],
-
-  // FINAL PAGE
-  [
-    `<span class="label">The end, for now</span>
-     <h2>Until our<br>next letter.</h2>
-     <p class="muted">Thank you for reading.</p>`,
-
-    `<span class="label">letters from civy</span>
-     <h3>Every ending is a beginning.</h3>
-     <p class="small">
-       Come back when there are more
-       pages to turn.
-     </p>`
-  ]
-];
-
-/* BOOK INTERACTIONS */
-
-const $ = id => document.getElementById(id);
-const spread = $('spread');
-
-let current = 0;
-let opened = false;
-let flipping = false;
-let coverTimer;
-
-function page(content, side, number) {
-  return `<article class="page ${side}">
-    ${content}
-    <span class="number">${number}</span>
-  </article>`;
-}
-
-function render() {
-  spread.innerHTML =
-    page(chapters[current][0], 'left', current * 2 + 1)
-    + page(chapters[current][1], 'right', current * 2 + 2);
-
-  $('leftEdge').disabled = current === 0;
-$('rightEdge').disabled =
-  current === chapters.length - 1;
-}
-
-function openBook() {
-  if (opened) return;
-
-  opened = true;
-
-document.querySelector('.book')
-  .classList.add('is-open');
-
-$('cover').classList.add('open');
-
-  for (const id of [
-  'close', 'leftEdge', 'rightEdge'
-]) {
-  $(id).hidden = false;
-}
-
-  render();
-
-  clearTimeout(coverTimer);
-
-  coverTimer = setTimeout(() => {
-    if (opened) {
-      $('cover').hidden = true;
-    }
-  }, 1250);
-}
-
-function closeBook() {
-  if (flipping) return;
-
-  opened = false;
-current = 0;
-
-document.querySelector('.book')
-  .classList.remove('is-open');
-
-render();
-
-  clearTimeout(coverTimer);
-  $('cover').hidden = false;
-  $('cover').classList.remove('open');
-
-  for (const id of [
-  'close', 'leftEdge', 'rightEdge'
-]) {
-  $(id).hidden = true;
-}
-}
-
-function flip(to) {
-  if (
-    !opened ||
-    flipping ||
-    to < 0 ||
-    to >= chapters.length ||
-    to === current
-  ) {
-    return;
-  }
-
-  // Jump directly when selecting a distant chapter.
-  if (Math.abs(to - current) > 1) {
-    current = to;
-    render();
-    return;
-  }
-
-  flipping = true;
-
-  const forward = to > current;
-
-  const oldLeft = page(
-    chapters[current][0],
-    'left',
-    current * 2 + 1
-  );
-
-  const oldRight = page(
-    chapters[current][1],
-    'right',
-    current * 2 + 2
-  );
-
-  const newLeft = page(
-    chapters[to][0],
-    'left',
-    to * 2 + 1
-  );
-
-  const newRight = page(
-    chapters[to][1],
-    'right',
-    to * 2 + 2
-  );
-
-  spread.innerHTML = forward
-    ? oldLeft + newRight
-    : newLeft + oldRight;
-
-  const leaf = document.createElement('div');
-
-  leaf.className =
-    `leaf ${forward ? 'forward' : 'backward'}`;
-
-  leaf.innerHTML = `
-    <div class="face front">
-      ${forward ? oldRight : oldLeft}
-    </div>
-
-    <div class="face back">
-      ${forward ? newLeft : newRight}
-    </div>
-  `;
-
-  document.querySelector('.book').appendChild(leaf);
-
-  for (const id of [
-  'leftEdge', 'rightEdge'
-]) {
-  $(id).disabled = true;
-}
-
-  leaf.addEventListener('animationend', () => {
-    leaf.remove();
-    current = to;
-    flipping = false;
-    render();
-  }, { once: true });
-}
-
-/* BUTTON CONTROLS */
-
-$('cover').addEventListener('click', openBook);
-
-$('cover').addEventListener('keydown', e => {
-  if (e.key === 'Enter' || e.key === ' ') {
-    e.preventDefault();
-    openBook();
-  }
+  mobileScrollSupport: false
 });
 
-$('close').addEventListener('click', closeBook);
+/* INITIALIZE THE BOOK */
 
+pageFlip.loadFromHTML(pageElements);
 
-$('leftEdge').addEventListener(
-  'click',
-  () => flip(current - 1)
-);
+/* EDGE CONTROLS */
 
-$('rightEdge').addEventListener(
-  'click',
-  () => flip(current + 1)
-);
+const prev = document.getElementById("prevEdge");
+const next = document.getElementById("nextEdge");
+const cover = document.getElementById("returnCover");
 
-/* TABLE OF CONTENTS */
+function updateControls() {
+  const index = pageFlip.getCurrentPageIndex();
+  const total = pageFlip.getPageCount();
 
-spread.addEventListener('click', e => {
-  const link = e.target.closest('[data-go]');
+  prev.hidden = index === 0;
 
-  if (link) {
-    flip(Number(link.dataset.go));
-  }
+  next.hidden = index >= total - 1;
+
+  cover.hidden = index === 0;
+}
+
+/* PAGE TURNING */
+
+prev.addEventListener("click", () => {
+  pageFlip.flipPrev("bottom");
 });
 
-/* KEYBOARD CONTROLS */
-
-document.addEventListener('keydown', e => {
-  if (!opened) return;
-
-  if (e.key === 'ArrowLeft') {
-    flip(current - 1);
-  }
-
-  if (e.key === 'ArrowRight') {
-    flip(current + 1);
-  }
-
-  if (e.key === 'Escape') {
-    closeBook();
-  }
+next.addEventListener("click", () => {
+  pageFlip.flipNext("bottom");
 });
 
-render();
+/* OPEN COVER */
+
+document.getElementById("openBook")
+  .addEventListener("click", event => {
+
+    event.stopPropagation();
+
+    pageFlip.flipNext("bottom");
+  });
+
+/* RETURN TO COVER */
+
+cover.addEventListener("click", () => {
+  pageFlip.flip(0, "bottom");
+});
+
+/* CHAPTER NAVIGATION */
+
+document.querySelectorAll("[data-page]")
+  .forEach(button => {
+
+    button.addEventListener("click", event => {
+
+      event.stopPropagation();
+
+      const pageNumber =
+        Number(button.dataset.page);
+
+      pageFlip.flip(pageNumber, "bottom");
+    });
+
+  });
+
+/* KEYBOARD */
+
+document.addEventListener("keydown", event => {
+
+  if (event.key === "ArrowRight") {
+    pageFlip.flipNext("bottom");
+  }
+
+  if (event.key === "ArrowLeft") {
+    pageFlip.flipPrev("bottom");
+  }
+
+});
+
+/* UPDATE ON EACH PAGE TURN */
+
+pageFlip.on("flip", () => {
+  updateControls();
+});
+
+pageFlip.on("changeOrientation", () => {
+  updateControls();
+});
+
+updateControls();
 
 </script>
 
